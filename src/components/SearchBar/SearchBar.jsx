@@ -2,8 +2,13 @@ import React, { Component } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import '../../../node_modules/react-toastify/dist/ReactToastify.css';
+import PropTypes from 'prop-types';
 
 export default class SearchBar extends Component {
+  static propTypes = {
+    handleFormSubmit: PropTypes.func.isRequired,
+  };
+
   state = {
     name: '',
   };
@@ -16,11 +21,7 @@ export default class SearchBar extends Component {
     e.preventDefault();
 
     if (this.state.name.trim() === '') {
-      toast.warn('Please enter image title  ', {
-        position: 'top-center',
-        autoClose: 2000,
-        className: 'foo-bar',
-      });
+      toast.warn('Please enter image title  ');
       return;
     }
 

@@ -7,18 +7,24 @@ import { getAllPages } from 'API/imageAPI';
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import ButtonLoadMore from './ButtonLoadMore/ButtonLoadMore';
+import { toast } from 'react-toastify';
+// import PropTypes from 'prop-types';
 
 class App extends Component {
   state = {
     name: '',
     photos: [],
     page: 1,
-    loader: false,
     quantityPhotos: 0,
+    loader: false,
     visibleLoadMoreBtn: false,
   };
 
   handleFormSubmit = name => {
+    if (this.state.name === name) {
+      toast.warn('Please enter other name');
+      return;
+    }
     this.setState({ name, page: 1, photos: [], visibleLoadMoreBtn: false });
   };
 
@@ -46,7 +52,11 @@ class App extends Component {
 
         const photos = await getAllPages(this.state.name, this.state.page);
 
-        console.log(photos);
+        if (photos.total === 0) {
+          toast.warn('Sorry, nothing found, please enter other name');
+          this.setState({ loader: false, visibleLoadMoreBtn: false });
+          return;
+        }
 
         this.setState(prevState => {
           const arrPhotos = [...prevState.photos, ...photos.hits];
@@ -66,19 +76,23 @@ class App extends Component {
   }
 
   render() {
-    const { loader, photos } = this.state;
+    const { loader, photos, visibleLoadMoreBtn } = this.state;
 
     return (
       <>
         <SearchBar handleFormSubmit={this.handleFormSubmit} />
 
-        <ToastContainer />
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          className="foo-bar"
+        />
 
         {loader && <Loader />}
 
         <ImageGallery photos={photos} />
 
-        {this.state.visibleLoadMoreBtn && (
+        {visibleLoadMoreBtn && (
           <ButtonLoadMore onClickLoadMore={this.onClickLoadMore} />
         )}
       </>

@@ -1,7 +1,14 @@
-import Modal from 'components/Modal/Modal';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import Modal from 'components/Modal/Modal';
 
 export default class ImageGalleryItem extends Component {
+  static propTypes = {
+    webFormatImg: PropTypes.string.isRequired,
+    largeImage: PropTypes.string.isRequired,
+  };
+
   state = {
     modalVisible: false,
   };

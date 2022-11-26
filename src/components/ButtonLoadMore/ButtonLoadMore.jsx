@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const ButtonLoadMore = ({ onClickLoadMore }) => {
   return (
@@ -9,3 +10,7 @@ const ButtonLoadMore = ({ onClickLoadMore }) => {
 };
 
 export default ButtonLoadMore;
+
+ButtonLoadMore.propTypes = {
+  onClickLoadMore: PropTypes.func.isRequired,
+};
