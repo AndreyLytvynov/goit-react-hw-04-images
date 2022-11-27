@@ -3,6 +3,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import '../../../node_modules/react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
+import { StyledSearchBar } from './SearchBar.styled';
 
 export default class SearchBar extends Component {
   static propTypes = {
@@ -31,11 +32,10 @@ export default class SearchBar extends Component {
   render() {
     return (
       <>
-        {' '}
-        <header className="Searchbar">
+        <StyledSearchBar className="Searchbar">
           <form onSubmit={this.onSubmit} className="SearchForm">
             <button type="submit" className="SearchForm-button">
-              <AiOutlineSearch className="SearchIcon" />
+              <AiOutlineSearch fill="rgb(143, 140, 140)" size="30px" />
             </button>
 
             <input
@@ -47,7 +47,7 @@ export default class SearchBar extends Component {
               onChange={this.onChange}
             />
           </form>
-        </header>
+        </StyledSearchBar>
       </>
     );
   }

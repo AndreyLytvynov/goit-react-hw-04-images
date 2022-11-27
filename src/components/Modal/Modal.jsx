@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { StyledOverlay } from './Modal.styled';
+
 export default class Modal extends Component {
   static propTypes = {
     openModal: PropTypes.func.isRequired,
@@ -12,7 +14,7 @@ export default class Modal extends Component {
     this.props.openModal();
   };
   clickOverlay = e => {
-    if (e.target.className !== 'Overlay') return;
+    if (e.target.tagName !== 'DIV') return;
     this.props.openModal();
   };
 
@@ -25,9 +27,9 @@ export default class Modal extends Component {
 
   render() {
     return (
-      <div className="Overlay" onClick={this.clickOverlay}>
-        <img className="Modal" src={this.props.largeImage} alt="" />
-      </div>
+      <StyledOverlay onClick={this.clickOverlay}>
+        <img src={this.props.largeImage} alt="" />
+      </StyledOverlay>
     );
   }
 }

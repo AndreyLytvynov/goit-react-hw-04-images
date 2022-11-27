@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { LoadMore } from './ButtonLoadMore.styled';
+
 const ButtonLoadMore = ({ onClickLoadMore }) => {
   return (
-    <button className="Button" type="button" onClick={onClickLoadMore}>
+    <LoadMore type="button" onClick={onClickLoadMore}>
       Load more
-    </button>
+    </LoadMore>
   );
 };
 

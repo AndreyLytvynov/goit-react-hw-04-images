@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
 
+import { ImageGalleryList } from './ImageGallery.styled';
+
 export default class ImageGallery extends Component {
   static propTypes = {
     photos: PropTypes.array.isRequired,
@@ -11,7 +13,7 @@ export default class ImageGallery extends Component {
   render() {
     return (
       <>
-        <ul className="ImageGallery">
+        <ImageGalleryList>
           {this.props.photos.map(({ id, webformatURL, largeImageURL }) => {
             return (
               <ImageGalleryItem
@@ -22,7 +24,7 @@ export default class ImageGallery extends Component {
               />
             );
           })}
-        </ul>
+        </ImageGalleryList>
       </>
     );
   }

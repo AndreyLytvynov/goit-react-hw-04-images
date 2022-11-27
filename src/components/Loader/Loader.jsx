@@ -6,7 +6,6 @@ const Loader = () => {
   return (
     <Box textAlign="center">
       <Dna
-        className="Loader"
         visible={true}
         height="80"
         width="80"

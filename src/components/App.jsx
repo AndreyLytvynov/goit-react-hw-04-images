@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import Loader from 'components/Loader/Loader';
 import { animateScroll as scroll } from 'react-scroll';
 import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import { getAllPages } from 'API/imageAPI';
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import ButtonLoadMore from './ButtonLoadMore/ButtonLoadMore';
-import { toast } from 'react-toastify';
+
 // import PropTypes from 'prop-types';
 
 class App extends Component {

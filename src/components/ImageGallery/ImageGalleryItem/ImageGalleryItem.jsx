@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import Modal from 'components/Modal/Modal';
 
+import { GalleryItem, GalleryImage } from './ImageGalleryItem.styled';
+
 export default class ImageGalleryItem extends Component {
   static propTypes = {
     webFormatImg: PropTypes.string.isRequired,
@@ -19,12 +21,11 @@ export default class ImageGalleryItem extends Component {
 
   render() {
     return (
-      <li className="ImageGalleryItem">
-        <img
+      <GalleryItem>
+        <GalleryImage
           onClick={this.openModal}
           src={this.props.webFormatImg}
           alt=""
-          className="ImageGalleryItem-image"
         />
         {this.state.modalVisible && (
           <Modal
@@ -32,7 +33,7 @@ export default class ImageGalleryItem extends Component {
             openModal={this.openModal}
           />
         )}
-      </li>
+      </GalleryItem>
     );
   }
 }
