@@ -1,39 +1,28 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Modal from 'components/Modal/Modal';
 
 import { GalleryItem, GalleryImage } from './ImageGalleryItem.styled';
 
-export default class ImageGalleryItem extends Component {
-  static propTypes = {
-    webFormatImg: PropTypes.string.isRequired,
-    largeImage: PropTypes.string.isRequired,
+const ImageGalleryItem = ({ webFormatImg, largeImage }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(prevState => !prevState);
   };
 
-  state = {
-    modalVisible: false,
-  };
+  return (
+    <GalleryItem>
+      <GalleryImage onClick={openModal} src={webFormatImg} alt="" />
+      {modalVisible && <Modal largeImage={largeImage} openModal={openModal} />}
+    </GalleryItem>
+  );
+};
 
-  openModal = () => {
-    this.setState({ modalVisible: !this.state.modalVisible });
-  };
+export default ImageGalleryItem;
 
-  render() {
-    return (
-      <GalleryItem>
-        <GalleryImage
-          onClick={this.openModal}
-          src={this.props.webFormatImg}
-          alt=""
-        />
-        {this.state.modalVisible && (
-          <Modal
-            largeImage={this.props.largeImage}
-            openModal={this.openModal}
-          />
-        )}
-      </GalleryItem>
-    );
-  }
-}
+ImageGalleryItem.propTypes = {
+  webFormatImg: PropTypes.string.isRequired,
+  largeImage: PropTypes.string.isRequired,
+};

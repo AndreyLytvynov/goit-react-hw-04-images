@@ -1,35 +1,37 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { StyledOverlay } from './Modal.styled';
 
-export default class Modal extends Component {
-  static propTypes = {
-    openModal: PropTypes.func.isRequired,
-    largeImage: PropTypes.string.isRequired,
-  };
+const Modal = ({ openModal, largeImage }) => {
+  useEffect(() => {
+    const clickEsc = e => {
+      if (e.code !== 'Escape') return;
+      openModal();
+    };
 
-  clickEsc = e => {
-    if (e.code !== 'Escape') return;
-    this.props.openModal();
-  };
-  clickOverlay = e => {
+    window.addEventListener('keydown', clickEsc);
+
+    return () => {
+      window.removeEventListener('keydown', clickEsc);
+    };
+  }, [openModal]);
+
+  const clickOverlay = e => {
     if (e.target.tagName !== 'DIV') return;
-    this.props.openModal();
+    openModal();
   };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.clickEsc);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.clickEsc);
-  }
+  return (
+    <StyledOverlay onClick={clickOverlay}>
+      <img src={largeImage} alt="" />
+    </StyledOverlay>
+  );
+};
 
-  render() {
-    return (
-      <StyledOverlay onClick={this.clickOverlay}>
-        <img src={this.props.largeImage} alt="" />
-      </StyledOverlay>
-    );
-  }
-}
+export default Modal;
+
+Modal.propTypes = {
+  openModal: PropTypes.func.isRequired,
+  largeImage: PropTypes.string.isRequired,
+};

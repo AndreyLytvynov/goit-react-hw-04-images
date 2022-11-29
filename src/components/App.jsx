@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Loader from 'components/Loader/Loader';
 import { animateScroll as scroll } from 'react-scroll';
 import { ToastContainer } from 'react-toastify';
@@ -11,94 +11,81 @@ import ButtonLoadMore from './ButtonLoadMore/ButtonLoadMore';
 
 // import PropTypes from 'prop-types';
 
-class App extends Component {
-  state = {
-    name: '',
-    photos: [],
-    page: 1,
-    quantityPhotos: 0,
-    loader: false,
-    visibleLoadMoreBtn: false,
-  };
+const App = () => {
+  const [name, setName] = useState('');
+  const [photos, setPhotos] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loaderVisible, setLoaderVisible] = useState(false);
+  const [visibleLoadMoreBtn, setVisibleLoadMoreBtn] = useState(false);
 
-  handleFormSubmit = name => {
-    if (this.state.name === name) {
+  const handleFormSubmit = formName => {
+    if (formName === name) {
       toast.warn('Please enter other name');
       return;
     }
-    this.setState({ name, page: 1, photos: [], visibleLoadMoreBtn: false });
+
+    setName(formName);
+    setPage(1);
+    setPhotos([]);
+    setVisibleLoadMoreBtn(false);
   };
 
-  onClickLoadMore = () => {
-    this.setState(prevState => {
-      return {
-        page: prevState.page + 1,
-      };
-    });
+  const onClickLoadMore = () => {
+    setPage(prevState => prevState + 1);
   };
 
-  scrollWindow = () => {
-    if (this.state.page > 1) {
-      scroll.scrollToBottom();
-    }
-  };
+  useEffect(() => {
+    if (name === '') return;
 
-  async componentDidUpdate(_, prevState) {
-    if (
-      prevState.name !== this.state.name ||
-      prevState.page !== this.state.page
-    ) {
+    setLoaderVisible(true);
+    setVisibleLoadMoreBtn(false);
+
+    async function fetchAPI() {
       try {
-        this.setState({ loader: true, visibleLoadMoreBtn: false });
-
-        const photos = await getAllPages(this.state.name, this.state.page);
+        const photos = await getAllPages(name, page);
 
         if (photos.total === 0) {
           toast.warn('Sorry, nothing found, please enter other name');
-          this.setState({ loader: false, visibleLoadMoreBtn: false });
+          setLoaderVisible(false);
+          setVisibleLoadMoreBtn(false);
           return;
         }
 
-        this.setState(prevState => {
-          const arrPhotos = [...prevState.photos, ...photos.hits];
-          return {
-            photos: arrPhotos,
-            loader: false,
-            quantityPhotos: arrPhotos.length,
-            visibleLoadMoreBtn: arrPhotos.length >= photos.total ? false : true,
-          };
-        });
+        setPhotos(prevState => [...prevState, ...photos.hits]);
 
-        this.scrollWindow();
+        setLoaderVisible(false);
+        setVisibleLoadMoreBtn(photos.length > photos.total ? false : true);
       } catch (error) {
         console.log(error);
       }
     }
-  }
 
-  render() {
-    const { loader, photos, visibleLoadMoreBtn } = this.state;
+    fetchAPI();
 
-    return (
-      <>
-        <SearchBar handleFormSubmit={this.handleFormSubmit} />
+    if (page > 1) {
+      scroll.scrollToBottom();
+    }
+  }, [name, page]);
 
-        <ToastContainer
-          position="top-center"
-          autoClose={2000}
-          className="foo-bar"
-        />
+  return (
+    <>
+      <SearchBar handleFormSubmit={handleFormSubmit} />
 
-        {loader && <Loader />}
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        className="foo-bar"
+      />
 
-        <ImageGallery photos={photos} />
+      {loaderVisible && <Loader />}
 
-        {visibleLoadMoreBtn && (
-          <ButtonLoadMore onClickLoadMore={this.onClickLoadMore} />
-        )}
-      </>
-    );
-  }
-}
+      <ImageGallery photos={photos} />
+
+      {visibleLoadMoreBtn && (
+        <ButtonLoadMore onClickLoadMore={onClickLoadMore} />
+      )}
+    </>
+  );
+};
 
 export default App;
